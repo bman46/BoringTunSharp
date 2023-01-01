@@ -1,8 +1,7 @@
 # BoringTunSharp
-A C# library for Cloudflare's [BoringTun](https://github.com/cloudflare/boringtun).
-
 > **Warning**
 > This library is not yet fully functional (work in progress).
+A C# library for Cloudflare's [BoringTun](https://github.com/cloudflare/boringtun).
 
 ## Getting Started
 To Do.
