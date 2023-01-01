@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 25.0.1705.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoringTunSharp", "BoringTunSharp\BoringTunSharp.csproj", "{452F255F-5F80-427E-BF96-ECE9086DB2CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoringTunTest", "BoringTunTest\BoringTunTest.csproj", "{CA7960BD-0EE1-44C2-AD54-A1435C0B5A60}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{452F255F-5F80-427E-BF96-ECE9086DB2CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{452F255F-5F80-427E-BF96-ECE9086DB2CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{452F255F-5F80-427E-BF96-ECE9086DB2CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{452F255F-5F80-427E-BF96-ECE9086DB2CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA7960BD-0EE1-44C2-AD54-A1435C0B5A60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA7960BD-0EE1-44C2-AD54-A1435C0B5A60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA7960BD-0EE1-44C2-AD54-A1435C0B5A60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA7960BD-0EE1-44C2-AD54-A1435C0B5A60}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {09BF4F30-B131-4F0D-896D-EA9D3169611F}
+	EndGlobalSection
+EndGlobal
