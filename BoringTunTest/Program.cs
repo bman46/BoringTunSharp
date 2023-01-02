@@ -27,7 +27,7 @@ string sharedKey = X25519KeyPair.KeyToBase64(X25519KeyPair.GenerateSecretKey());
 // Create a mock tunnel within this process
 using (WireGuardTunnel client = new WireGuardTunnel(clientKey.PrivateKeyBase64(), serverKey.PublicKeyBase64(), sharedKey, 100, 0))
 {
-    using (WireGuardTunnel server = new WireGuardTunnel(serverKey.PrivateKeyBase64(), clientKey.PublicKeyBase64(), sharedKey, 10, 0))
+    using (WireGuardTunnel server = new WireGuardTunnel(serverKey.PrivateKeyBase64(), clientKey.PublicKeyBase64(), sharedKey, 100, 0))
     {
         // Start a handshake:
         var handshake = client.Handshake();
