@@ -96,7 +96,7 @@ using (WireGuardTunnel client = new WireGuardTunnel(clientKey.PrivateKeyBase64()
         }
         else
         {
-            throw new Exception("Decrupted packet different from origin.");
+            throw new Exception("Decrypted packet different from original.");
         }
         Console.WriteLine("Done packet transmission");
     }
