@@ -5,8 +5,8 @@ using BoringTunSharp.Crypto;
 
 namespace BoringTunSharp
 {
-	public class X25519KeyPair
-	{
+    public class X25519KeyPair
+    {
         /// <summary>
         /// Create a key pair from an existing key
         /// </summary>
@@ -64,7 +64,7 @@ namespace BoringTunSharp
         /// <summary>
         /// The private key
         /// </summary>
-		public X25519PrivateKey PrivateKey
+        public X25519PrivateKey PrivateKey
         {
             get
             {
