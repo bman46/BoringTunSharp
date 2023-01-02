@@ -124,7 +124,7 @@ namespace BoringTunSharp
                 case result_type.WIREGUARD_DONE:
                     return null;
                 case result_type.WIREGUARD_ERROR:
-                    throw new InvalidOperationException("Failed to process WG data.");
+                    throw new InvalidOperationException("Failed to process WireGuard data.");
                 case result_type.WRITE_TO_NETWORK:
                     resultDst = WireGuardData.Destination.Network;
                     break;

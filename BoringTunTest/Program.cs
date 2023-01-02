@@ -1,4 +1,5 @@
-﻿using BoringTunSharp;
+﻿using System.Reflection.PortableExecutable;
+using BoringTunSharp;
 using BoringTunTest;
 
 // Set logger:
@@ -18,11 +19,10 @@ catch (InvalidOperationException e)
 // Generate key pairs:
 X25519KeyPair clientKey = new X25519KeyPair();
 X25519KeyPair serverKey = new X25519KeyPair();
-Console.WriteLine("Private: "+clientKey.PrivateKeyBase64()+" public: "+clientKey.PublicKeyBase64());
-Console.WriteLine("Private: " + serverKey.PrivateKeyBase64() + " public: " + serverKey.PublicKeyBase64());
-
 string sharedKey = X25519KeyPair.KeyToBase64(X25519KeyPair.GenerateSecretKey());
-
+Console.WriteLine("Client: Private: "+clientKey.PrivateKeyBase64()+" public: "+clientKey.PublicKeyBase64());
+Console.WriteLine("Server: Private: " + serverKey.PrivateKeyBase64() + " public: " + serverKey.PublicKeyBase64());
+Console.WriteLine("Shared Key: " + sharedKey);
 
 // Create a mock tunnel within this process
 using (WireGuardTunnel client = new WireGuardTunnel(clientKey.PrivateKeyBase64(), serverKey.PublicKeyBase64(), sharedKey, 100, 0))
@@ -31,8 +31,8 @@ using (WireGuardTunnel client = new WireGuardTunnel(clientKey.PrivateKeyBase64()
     {
         // Start a handshake:
         var handshake = client.Handshake();
-        bool toServer = true;
         Console.WriteLine("Handshake: "+handshake?.SendTo);
+        bool toServer = true;
         while (handshake != null)
         {
             if (toServer)
@@ -51,6 +51,55 @@ using (WireGuardTunnel client = new WireGuardTunnel(clientKey.PrivateKeyBase64()
             }
         }
         Console.WriteLine("Handshake complete!");
+
+        // Example TCP SYN packet:
+        string ip_header = "45000028";  // Version, IHL, Type of Service | Total Length
+        ip_header += "abcd0000"; // Identification | Flags, Fragment Offset
+        ip_header += "4006a6ec"; // TTL, Protocol | Header Checksum
+        ip_header += "0a0a0a02"; // Source Address
+        ip_header += "0a0a0a01"; // Destination Address
+
+        string tcp_header = "30390050"; // Source Port | Destination Port
+        tcp_header += "00000000"; // Sequence Number
+        tcp_header += "00000000"; // Acknowledgement Number
+        tcp_header += "50027110"; // Data Offset, Reserved, Flags | Window Size
+        tcp_header += "e6320000"; // Checksum | Urgent Pointer
+
+        byte[] packet = Convert.FromHexString(ip_header + tcp_header);
+        Console.WriteLine("Client Input: " + Convert.ToBase64String(packet));
+
+        var encryptedData = client.Encapsulate(packet);
+
+        Console.WriteLine("Encrypted Data: "+Convert.ToBase64String(encryptedData?.Data));
+        toServer = true;
+        // This should only run once:
+        while (encryptedData != null && encryptedData.SendTo != WireGuardData.Destination.Tunnel_IPv4)
+        {
+            if (toServer)
+            {
+                Console.WriteLine("Send to server");
+                encryptedData = server.Decapsulate(encryptedData.Data);
+                Console.WriteLine("Result: " + encryptedData?.SendTo);
+                toServer = !toServer;
+            }
+            else
+            {
+                Console.WriteLine("Send to client");
+                encryptedData = client.Decapsulate(encryptedData.Data);
+                Console.WriteLine("Result: " + encryptedData?.SendTo);
+                toServer = !toServer;
+            }
+        }
+        Console.WriteLine("Server Result: " + Convert.ToBase64String(encryptedData?.Data));
+        if (packet.SequenceEqual(encryptedData?.Data))
+        {
+            Console.WriteLine("The data from the client is the same as the data arrived at the server!");
+        }
+        else
+        {
+            throw new Exception("Decrupted packet different from origin.");
+        }
+        Console.WriteLine("Done packet transmission");
     }
 }
 Console.WriteLine("Done!");
