@@ -1,5 +1,4 @@
-﻿using System.Reflection.PortableExecutable;
-using BoringTunSharp;
+﻿using BoringTunSharp;
 using BoringTunTest;
 
 // Set logger:
