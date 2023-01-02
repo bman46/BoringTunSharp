@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using BoringTunSharp.Crypto;
 using BoringTunSharp.Tunneling;
 
 namespace BoringTunSharp
@@ -7,9 +8,29 @@ namespace BoringTunSharp
     public class WireGuardTunnel : IDisposable
     {
         #region Constructors
-        public WireGuardTunnel(string privateKey, string peerPublicKey, string presharedKey, ushort keepAlive, uint index)
+        /// <summary>
+        /// Create a new tunnel
+        /// </summary>
+        /// <param name="privateKey">The private key for the current machine</param>
+        /// <param name="peerPublicKey">The public key for the peer</param>
+        /// <param name="presharedKey">The preshared key</param>
+        /// <param name="keepAlive">Keep alive time</param>
+        /// <param name="index">Tunnel index</param>
+        public WireGuardTunnel(IX25519Key privateKey, IX25519Key peerPublicKey, IX25519Key presharedKey, ushort keepAlive, uint index)
         {
-            NewTunnel(privateKey, peerPublicKey, presharedKey, keepAlive, index);
+            NewTunnel(privateKey.Base64(), peerPublicKey.Base64(), presharedKey.Base64(), keepAlive, index);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="privatePair">A key pair for the current machine</param>
+        /// <param name="peerPublicKey">The public key for the peer</param>
+        /// <param name="presharedKey">The preshared key</param>
+        /// <param name="keepAlive">Keep alive time</param>
+        /// <param name="index">Tunnel index</param>
+        public WireGuardTunnel(X25519KeyPair privatePair, IX25519Key peerPublicKey, IX25519Key presharedKey, ushort keepAlive, uint index)
+        {
+            NewTunnel(privatePair.PrivateKey.Base64(), peerPublicKey.Base64(), presharedKey.Base64(), keepAlive, index);
         }
 
         #endregion

@@ -1,4 +1,5 @@
 ﻿using BoringTunSharp;
+using BoringTunSharp.Crypto;
 using BoringTunTest;
 
 // Set logger:
@@ -18,15 +19,15 @@ catch (InvalidOperationException e)
 // Generate key pairs:
 X25519KeyPair clientKey = new X25519KeyPair();
 X25519KeyPair serverKey = new X25519KeyPair();
-string sharedKey = X25519KeyPair.KeyToBase64(X25519KeyPair.GenerateSecretKey());
-Console.WriteLine("Client: Private: "+clientKey.PrivateKeyBase64()+" public: "+clientKey.PublicKeyBase64());
-Console.WriteLine("Server: Private: " + serverKey.PrivateKeyBase64() + " public: " + serverKey.PublicKeyBase64());
-Console.WriteLine("Shared Key: " + sharedKey);
+IX25519Key sharedKey = new X25519PrivateKey();
+Console.WriteLine("Client: Private: "+clientKey.PrivateKey.Base64()+" public: "+clientKey.PublicKey.Base64());
+Console.WriteLine("Server: Private: " + serverKey.PrivateKey.Base64() + " public: " + serverKey.PublicKey.Base64());
+Console.WriteLine("Shared Key: " + sharedKey.Base64());
 
 // Create a mock tunnel within this process
-using (WireGuardTunnel client = new WireGuardTunnel(clientKey.PrivateKeyBase64(), serverKey.PublicKeyBase64(), sharedKey, 100, 0))
+using (WireGuardTunnel client = new WireGuardTunnel(clientKey, serverKey.PublicKey, sharedKey, 100, 0))
 {
-    using (WireGuardTunnel server = new WireGuardTunnel(serverKey.PrivateKeyBase64(), clientKey.PublicKeyBase64(), sharedKey, 100, 0))
+    using (WireGuardTunnel server = new WireGuardTunnel(serverKey, clientKey.PublicKey, sharedKey, 100, 0))
     {
         // Start a handshake:
         var handshake = client.Handshake();
