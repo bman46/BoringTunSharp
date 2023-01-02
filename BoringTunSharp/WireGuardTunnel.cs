@@ -10,17 +10,75 @@ namespace BoringTunSharp
         {
             NewTunnel(privateKey, peerPublicKey, presharedKey, keepAlive, index);
         }
+
         #endregion
         #region Library User Functions
         /// <summary>
-        /// Disposes the tunnel from memory:
+        /// Disposes the tunnel from memory
         /// </summary>
-        public void Dispose()
+        public unsafe void Dispose()
         {
-            DeallocateTunnel();
+            tunnel_free(tun);
         }
+
+        /// <summary>
+        /// Encapsulate data to send
+        /// </summary>
+        /// <param name="data">The data to encapsulate</param>
+        /// <returns>A wireguard data object. Null if nothing to do.</returns>
+        public unsafe WireGuardData? Encapsulate(byte[] data)
+        {
+            // Create new byte array of the max size of a UDP packet.
+            byte[] outputData = new byte[MaxUDPSize];
+            wireguard_result wgResult = wireguard_write(tun, data, (uint)data.Length, outputData, (uint)outputData.Length);
+            return WireGuardDataBuilder(wgResult, outputData);
+        }
+
+        /// <summary>
+        /// Decapsulates data from WireGuard peer.
+        /// </summary>
+        /// <param name="data">Data to decapsulate</param>
+        /// <returns>A wireguard data object. Null if nothing to do.</returns>
+        public unsafe WireGuardData? Decapsulate(byte[] data)
+        {
+            // Create new byte array of the max size of a UDP packet.
+            byte[] outputData = new byte[MaxUDPSize];
+            wireguard_result wgResult = wireguard_read(tun, data, (uint)data.Length, outputData, (uint)outputData.Length);
+            return WireGuardDataBuilder(wgResult, outputData);
+        }
+
+        /// <summary>
+        /// Ticks the WireGuard Tunnel
+        /// </summary>
+        /// <returns>A wireguard data object. Null if nothing to do.</returns>
+        public unsafe WireGuardData? Tick()
+        {
+            // Create new byte array of the max size of a UDP packet.
+            byte[] outputData = new byte[MaxUDPSize];
+            wireguard_result wgResult = wireguard_tick(tun, outputData, (uint)outputData.Length);
+            return WireGuardDataBuilder(wgResult, outputData);
+        }
+
+        /// <summary>
+        /// Forces a WireGuard handshake
+        /// Needed to initially establish tunnel. May also be needed later to recreate the connection.
+        /// </summary>
+        /// <returns>A wireguard data object. Null if nothing to do.</returns>
+        public unsafe WireGuardData? Handshake()
+        {
+            // Create new byte array of the max size of a UDP packet.
+            byte[] outputData = new byte[MaxUDPSize];
+            wireguard_result wgResult = wireguard_force_handshake(tun, outputData, (uint)outputData.Length);
+            return WireGuardDataBuilder(wgResult, outputData);
+        }
+
         #endregion
         #region BoringTun helpers
+        /// <summary>
+        /// The maximum size of a UDP packet
+        /// </summary>
+        private static readonly int MaxUDPSize = 65535;
+
         /// <summary>
         /// An instance of the wireguard tunnel
         /// </summary>
@@ -48,15 +106,43 @@ namespace BoringTunSharp
         }
 
         /// <summary>
-        /// Deallocate this tunnel from the memory
+        /// Handles the result of a WireGuard function
         /// </summary>
-        private unsafe void DeallocateTunnel()
+        /// <param name="wgResult"></param>
+        /// <param name="outputData"></param>
+        /// <returns></returns>
+        /// <exception cref="FormatException"></exception>
+        /// <exception cref="InvalidOperationException"></exception>
+        private WireGuardData? WireGuardDataBuilder(wireguard_result wgResult, Byte[] outputData)
         {
-            tunnel_free(tun);
+            WireGuardData.Destination resultDst;
+            // Determine what to do based on the result of the operation:
+            switch (wgResult.op)
+            {
+                default:
+                    throw new FormatException("Unknown WG Result");
+                case result_type.WIREGUARD_DONE:
+                    return null;
+                case result_type.WIREGUARD_ERROR:
+                    throw new InvalidOperationException("Failed to process WG data.");
+                case result_type.WRITE_TO_NETWORK:
+                    resultDst = WireGuardData.Destination.Network;
+                    break;
+                case result_type.WRITE_TO_TUNNEL_IPV4:
+                    resultDst = WireGuardData.Destination.Tunnel_IPv4;
+                    break;
+                case result_type.WRITE_TO_TUNNEL_IPV6:
+                    resultDst = WireGuardData.Destination.Tunnel_IPv6;
+                    break;
+            }
+            // Resize the array to the size we want now:
+            Array.Resize(ref outputData, (int)wgResult.size);
+            // Return the result:
+            return new WireGuardData(outputData, resultDst);
         }
+
         #endregion
         #region BoringTun Functions
-
         /// <summary>
         /// Allocate a new tunnel
         /// </summary>
@@ -76,16 +162,59 @@ namespace BoringTunSharp
         [DllImport("libboringtun", CallingConvention = CallingConvention.Cdecl)]
         private static unsafe extern void tunnel_free(object* tunnel);
 
+        /// <summary>
+        /// Encapsulate data with WireGuard
+        /// </summary>
+        /// <param name="tunnel"></param>
+        /// <param name="src"></param>
+        /// <param name="src_size"></param>
+        /// <param name="dst"></param>
+        /// <param name="dst_size"></param>
+        /// <returns></returns>
+        [DllImport("libboringtun", CallingConvention = CallingConvention.Cdecl)]
+        private static unsafe extern wireguard_result wireguard_write(object* tunnel, byte[] src, uint src_size, byte[] dst, uint dst_size);
+
+        /// <summary>
+        /// Decapsulate data from WireGuard
+        /// </summary>
+        /// <param name="tunnel"></param>
+        /// <param name="src"></param>
+        /// <param name="src_size"></param>
+        /// <param name="dst"></param>
+        /// <param name="dst_size"></param>
+        /// <returns></returns>
+        [DllImport("libboringtun", CallingConvention = CallingConvention.Cdecl)]
+        private static unsafe extern wireguard_result wireguard_read(object* tunnel, byte[] src, uint src_size, byte[] dst, uint dst_size);
+
+        /// <summary>
+        /// Tick the WireGuard tunnel
+        /// </summary>
+        /// <param name="tunnel"></param>
+        /// <param name="dst"></param>
+        /// <param name="dst_size"></param>
+        /// <returns></returns>
+        [DllImport("libboringtun", CallingConvention = CallingConvention.Cdecl)]
+        private static unsafe extern wireguard_result wireguard_tick(object* tunnel, byte[] dst, uint dst_size);
+
+        /// <summary>
+        /// Force a WireGuard Handshake
+        /// </summary>
+        /// <param name="tunnel"></param>
+        /// <param name="dst"></param>
+        /// <param name="dst_size"></param>
+        /// <returns></returns>
+        [DllImport("libboringtun", CallingConvention = CallingConvention.Cdecl)]
+        private static unsafe extern wireguard_result wireguard_force_handshake(object* tunnel, byte[] dst, uint dst_size);
+
         #endregion
         #region Boringtun Structs
-
         /// <summary>
         /// The result of the operation
         /// </summary>
         private struct wireguard_result
         {
-            result_type op;
-            IntPtr size;
+            public result_type op;
+            public IntPtr size;
         };
 
         #endregion
