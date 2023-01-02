@@ -3,8 +3,8 @@ using System.Runtime.InteropServices;
 
 namespace BoringTunSharp
 {
-	public class BoringTunLogger
-	{
+    public class BoringTunLogger
+    {
         /// <summary>
         /// Set the function to use for logging.
         /// </summary>
@@ -13,20 +13,16 @@ namespace BoringTunSharp
         /// <param name="logDel"></param>
         public static void SetLogging(LoggingCallbackDelegate logDel)
         {
-            // Check to see if loggingDelegateInstance is null
-            bool loggingDelegateInstanceWasNull = false;
-            if (loggingDelegateInstance == null) {
-                loggingDelegateInstanceWasNull = true;
+            // Check to see if loggingDelegateInstance is not null
+            if (loggingDelegateInstance != null) {
+                throw new InvalidOperationException("The logging function can only be set once.");
             }
             // Set to a static var to guard against GC.
             loggingDelegateInstance = logDel;
+            // Set and call result
             bool result = set_logging_function(loggingDelegateInstance);
             // Ensure it was successful:
-            if (!result && !loggingDelegateInstanceWasNull)
-            {
-                throw new InvalidOperationException("The logging function can only be set once.");
-            }
-            else if (!result)
+            if (!result)
             {
                 throw new ArgumentException("Failed to set boringtun logging function.");
             }

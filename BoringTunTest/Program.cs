@@ -15,6 +15,14 @@ catch (InvalidOperationException e)
     Console.WriteLine("Correctly failed to set logging twice. Error: "+e.Message);
 }
 
-// Generate a key pair:
-X25519KeyPair key = new X25519KeyPair();
-Console.WriteLine("Private: "+key.PrivateKeyBase64()+" public: "+key.PublicKeyBase64());
+// Generate key pairs:
+X25519KeyPair client = new X25519KeyPair();
+X25519KeyPair server = new X25519KeyPair();
+Console.WriteLine("Private: "+client.PrivateKeyBase64()+" public: "+client.PublicKeyBase64());
+Console.WriteLine("Private: " + server.PrivateKeyBase64() + " public: " + server.PublicKeyBase64());
+
+string sharedKey = X25519KeyPair.KeyToBase64(X25519KeyPair.GenerateSecretKey());
+
+
+// Create a tunnel
+WireGuardTunnel tun = new WireGuardTunnel(client.PrivateKeyBase64(), server.PublicKeyBase64(), sharedKey, 10, 0);
