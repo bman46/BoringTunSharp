@@ -8,14 +8,25 @@ namespace BoringTunSharp
         /// <summary>
         /// Set the function to use for logging.
         /// </summary>
+        /// <exception cref="InvalidOperationException">Thrown when attempting to set the logging function again.</exception>
+        /// <exception cref="ArgumentException">Setting the logging function failed.</exception>
         /// <param name="logDel"></param>
         public static void SetLogging(LoggingCallbackDelegate logDel)
         {
+            // Check to see if loggingDelegateInstance is null
+            bool loggingDelegateInstanceWasNull = false;
+            if (loggingDelegateInstance == null) {
+                loggingDelegateInstanceWasNull = true;
+            }
             // Set to a static var to guard against GC.
             loggingDelegateInstance = logDel;
-            bool result = set_logging_function(logDel);
+            bool result = set_logging_function(loggingDelegateInstance);
             // Ensure it was successful:
-            if (!result)
+            if (!result && !loggingDelegateInstanceWasNull)
+            {
+                throw new InvalidOperationException("The logging function can only be set once.");
+            }
+            else if (!result)
             {
                 throw new ArgumentException("Failed to set boringtun logging function.");
             }
