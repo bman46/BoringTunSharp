@@ -26,3 +26,6 @@ string sharedKey = X25519KeyPair.KeyToBase64(X25519KeyPair.GenerateSecretKey());
 
 // Create a tunnel
 WireGuardTunnel tun = new WireGuardTunnel(client.PrivateKeyBase64(), server.PublicKeyBase64(), sharedKey, 10, 0);
+tun.Dispose();
+
+Console.WriteLine("Done!");

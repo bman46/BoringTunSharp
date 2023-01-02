@@ -12,10 +12,12 @@ namespace BoringTunSharp
         }
         #endregion
         #region Library User Functions
+        /// <summary>
+        /// Disposes the tunnel from memory:
+        /// </summary>
         public void Dispose()
         {
-            // TODO: dispose of tunnel
-            //throw new NotImplementedException();
+            DeallocateTunnel();
         }
         #endregion
         #region BoringTun helpers
@@ -44,6 +46,14 @@ namespace BoringTunSharp
             }
             tun = (object*) newTun;
         }
+
+        /// <summary>
+        /// Deallocate this tunnel from the memory
+        /// </summary>
+        private unsafe void DeallocateTunnel()
+        {
+            tunnel_free(tun);
+        }
         #endregion
         #region BoringTun Functions
 
@@ -59,8 +69,16 @@ namespace BoringTunSharp
         [DllImport("libboringtun", CallingConvention = CallingConvention.Cdecl)]
         private static unsafe extern object?* new_tunnel(string static_private, string server_static_public, string preshared_key, ushort keep_alive, uint index);
 
+        /// <summary>
+        /// Deallocate a tunnel
+        /// </summary>
+        /// <param name="tunnel">The tunnel to deallocate</param>
+        [DllImport("libboringtun", CallingConvention = CallingConvention.Cdecl)]
+        private static unsafe extern void tunnel_free(object* tunnel);
+
         #endregion
         #region Boringtun Structs
+
         /// <summary>
         /// The result of the operation
         /// </summary>
@@ -69,8 +87,10 @@ namespace BoringTunSharp
             result_type op;
             IntPtr size;
         };
+
         #endregion
         #region Boringtun Enum's
+
         /// <summary>
         /// Indicates the operation required from the caller
         /// </summary>
