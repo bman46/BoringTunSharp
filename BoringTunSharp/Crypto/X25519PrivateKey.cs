@@ -3,16 +3,16 @@ using System.Runtime.InteropServices;
 
 namespace BoringTunSharp.Crypto
 {
-	public class X25519PrivateKey : IX25519Key
-	{
+    public class X25519PrivateKey : IX25519Key
+    {
         /// <summary>
         /// Creates a new x25519 key.
         /// </summary>
-		public X25519PrivateKey()
-		{
+        public X25519PrivateKey()
+        {
             x25519_key key = x25519_secret_key();
             data = key.key;
-		}
+        }
 
         /// <summary>
         /// Creates a new instance of this class from

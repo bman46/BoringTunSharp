@@ -3,8 +3,8 @@ using System.Runtime.InteropServices;
 
 namespace BoringTunSharp.Crypto
 {
-	public interface IX25519Key
-	{
+    public interface IX25519Key
+    {
         /// <summary>
         /// The raw byte array data for the key
         /// </summary>

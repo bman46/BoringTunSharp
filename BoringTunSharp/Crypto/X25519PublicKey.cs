@@ -3,18 +3,18 @@ using System.Runtime.InteropServices;
 
 namespace BoringTunSharp.Crypto
 {
-	public class X25519PublicKey : IX25519Key
+    public class X25519PublicKey : IX25519Key
     {
         /// <summary>
         /// Generate a public key from a private key
         /// </summary>
         /// <param name="privateKey"></param>
-		public X25519PublicKey(X25519PrivateKey privateKey)
-		{
+        public X25519PublicKey(X25519PrivateKey privateKey)
+        {
             x25519_key key = new x25519_key();
             key.key = privateKey.Data;
             data = x25519_public_key(key).key;
-		}
+        }
         /// <summary>
         /// Set this key to the byte array of an existing key
         /// </summary>

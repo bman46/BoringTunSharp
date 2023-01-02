@@ -3,8 +3,8 @@ using System.Text;
 
 namespace BoringTunSharp.Tunneling
 {
-	public struct WireGuardTunnelStats
-	{
+    public struct WireGuardTunnelStats
+    {
         /// <summary>
         /// The time since the last handshake
         /// </summary>
