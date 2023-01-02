@@ -14,6 +14,10 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Tunneling\" />
+    <None Remove="Crypto\" />
+  </ItemGroup>
+  <ItemGroup>
     <None Update="libboringtun.dylib">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -23,5 +27,9 @@
     <None Update="libboringtun.so">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Tunneling\" />
+    <Folder Include="Crypto\" />
   </ItemGroup>
 </Project>
