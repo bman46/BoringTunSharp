@@ -66,6 +66,24 @@ namespace BoringTunSharp
         }
 
         /// <summary>
+        /// The public key in hex form
+        /// </summary>
+        /// <returns>A hex string of the public key</returns>
+        public string PublicKeyHex()
+        {
+            return KeyToHex(publicKey);
+        }
+
+        /// <summary>
+        /// The private key in hex form
+        /// </summary>
+        /// <returns>A hex string of the private key</returns>
+        public string PrivateKeyHex()
+        {
+            return KeyToHex(privateKey);
+        }
+
+        /// <summary>
         /// Converts a byte[] key to base64
         /// </summary>
         /// <param name="key">The key to convert</param>
@@ -73,6 +91,16 @@ namespace BoringTunSharp
         public static string KeyToBase64(byte[] key)
         {
             return Convert.ToBase64String(key);
+        }
+
+        /// <summary>
+        /// Converts a byte[] key to hex
+        /// </summary>
+        /// <param name="key">The key to convert</param>
+        /// <returns>The key in hex string</returns>
+        public static string KeyToHex(byte[] key)
+        {
+            return Convert.ToHexString(key);
         }
 
         /// <summary>
