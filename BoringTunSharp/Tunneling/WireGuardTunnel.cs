@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using BoringTunSharp.Tunneling;
 
 namespace BoringTunSharp
 {
@@ -72,6 +73,11 @@ namespace BoringTunSharp
             return WireGuardDataBuilder(wgResult, outputData);
         }
 
+        public unsafe WireGuardTunnelStats GetTunnelStats()
+        {
+            return wireguard_stats(tun);
+        }
+
         #endregion
         #region BoringTun helpers
         /// <summary>
@@ -120,7 +126,7 @@ namespace BoringTunSharp
             switch (wgResult.op)
             {
                 default:
-                    throw new FormatException("Unknown WG Result");
+                    throw new FormatException("Unknown BoringTun Result");
                 case result_type.WIREGUARD_DONE:
                     return null;
                 case result_type.WIREGUARD_ERROR:
@@ -205,6 +211,14 @@ namespace BoringTunSharp
         /// <returns></returns>
         [DllImport("libboringtun", CallingConvention = CallingConvention.Cdecl)]
         private static unsafe extern wireguard_result wireguard_force_handshake(object* tunnel, byte[] dst, uint dst_size);
+
+        /// <summary>
+        /// Gets the statistics about the WireGuard tunnel
+        /// </summary>
+        /// <param name="tunnel">The tunnel to get the stats from</param>
+        /// <returns>A struct with stats</returns>
+        [DllImport("libboringtun", CallingConvention = CallingConvention.Cdecl)]
+        private static unsafe extern WireGuardTunnelStats wireguard_stats(object* tunnel);
 
         #endregion
         #region Boringtun Structs

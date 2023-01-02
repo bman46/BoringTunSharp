@@ -99,6 +99,10 @@ using (WireGuardTunnel client = new WireGuardTunnel(clientKey.PrivateKeyBase64()
             throw new Exception("Decrypted packet different from original.");
         }
         Console.WriteLine("Done packet transmission");
+        Console.WriteLine("Client Stats:");
+        Console.WriteLine(client.GetTunnelStats());
+        Console.WriteLine("Server Stats:");
+        Console.WriteLine(server.GetTunnelStats());
     }
 }
 Console.WriteLine("Done!");
