@@ -70,7 +70,7 @@ namespace BoringTunSharp.Crypto
         /// </summary>
         /// <param name="secretKey">The key to derive from</param>
         /// <returns>A public key</returns>
-        [DllImport("libboringtun", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(BoringTunDLLLocation.DLLName, CallingConvention = CallingConvention.Cdecl)]
         private static extern x25519_key x25519_public_key(x25519_key secretKey);
         #endregion
     }

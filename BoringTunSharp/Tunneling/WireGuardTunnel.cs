@@ -179,14 +179,14 @@ namespace BoringTunSharp
         /// <param name="keep_alive">keep alive interval</param>
         /// <param name="index">24bit index prefix to be used for session indexes</param>
         /// <returns>Null if failed</returns>
-        [DllImport("libboringtun", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(BoringTunDLLLocation.DLLName, CallingConvention = CallingConvention.Cdecl)]
         private static unsafe extern object?* new_tunnel(string static_private, string server_static_public, string preshared_key, ushort keep_alive, uint index);
 
         /// <summary>
         /// Deallocate a tunnel
         /// </summary>
         /// <param name="tunnel">The tunnel to deallocate</param>
-        [DllImport("libboringtun", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(BoringTunDLLLocation.DLLName, CallingConvention = CallingConvention.Cdecl)]
         private static unsafe extern void tunnel_free(object* tunnel);
 
         /// <summary>
@@ -198,7 +198,7 @@ namespace BoringTunSharp
         /// <param name="dst"></param>
         /// <param name="dst_size"></param>
         /// <returns></returns>
-        [DllImport("libboringtun", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(BoringTunDLLLocation.DLLName, CallingConvention = CallingConvention.Cdecl)]
         private static unsafe extern wireguard_result wireguard_write(object* tunnel, byte[] src, uint src_size, byte[] dst, uint dst_size);
 
         /// <summary>
@@ -210,7 +210,7 @@ namespace BoringTunSharp
         /// <param name="dst"></param>
         /// <param name="dst_size"></param>
         /// <returns></returns>
-        [DllImport("libboringtun", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(BoringTunDLLLocation.DLLName, CallingConvention = CallingConvention.Cdecl)]
         private static unsafe extern wireguard_result wireguard_read(object* tunnel, byte[] src, uint src_size, byte[] dst, uint dst_size);
 
         /// <summary>
@@ -220,7 +220,7 @@ namespace BoringTunSharp
         /// <param name="dst"></param>
         /// <param name="dst_size"></param>
         /// <returns></returns>
-        [DllImport("libboringtun", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(BoringTunDLLLocation.DLLName, CallingConvention = CallingConvention.Cdecl)]
         private static unsafe extern wireguard_result wireguard_tick(object* tunnel, byte[] dst, uint dst_size);
 
         /// <summary>
@@ -230,7 +230,7 @@ namespace BoringTunSharp
         /// <param name="dst"></param>
         /// <param name="dst_size"></param>
         /// <returns></returns>
-        [DllImport("libboringtun", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(BoringTunDLLLocation.DLLName, CallingConvention = CallingConvention.Cdecl)]
         private static unsafe extern wireguard_result wireguard_force_handshake(object* tunnel, byte[] dst, uint dst_size);
 
         /// <summary>
@@ -238,7 +238,7 @@ namespace BoringTunSharp
         /// </summary>
         /// <param name="tunnel">The tunnel to get the stats from</param>
         /// <returns>A struct with stats</returns>
-        [DllImport("libboringtun", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(BoringTunDLLLocation.DLLName, CallingConvention = CallingConvention.Cdecl)]
         private static unsafe extern WireGuardTunnelStats wireguard_stats(object* tunnel);
 
         #endregion

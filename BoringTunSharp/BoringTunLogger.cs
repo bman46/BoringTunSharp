@@ -50,7 +50,7 @@ namespace BoringTunSharp
         /// </remarks>
         /// <param name="loggingDelegate">The delegate to use for logging</param>
         /// <returns>false on failure</returns>
-        [DllImport("libboringtun", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(BoringTunDLLLocation.DLLName, CallingConvention = CallingConvention.Cdecl)]
         private static extern bool set_logging_function(LoggingCallbackDelegate loggingDelegate);
 
     }

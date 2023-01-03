@@ -68,7 +68,7 @@ namespace BoringTunSharp.Crypto
         /// Generates a fresh x25519 secret key
         /// </summary>
         /// <returns>A x25519 secret key</returns>
-        [DllImport("libboringtun", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(BoringTunDLLLocation.DLLName, CallingConvention = CallingConvention.Cdecl)]
         private static extern x25519_key x25519_secret_key();
         #endregion
     }

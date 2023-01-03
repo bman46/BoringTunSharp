@@ -21,7 +21,7 @@ namespace BoringTunSharp.Crypto
 		/// </summary>
 		/// <param name="base64Key">The key to validate</param>
 		/// <returns>0 if not valid</returns>
-        [DllImport("libboringtun", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(BoringTunDLLLocation.DLLName, CallingConvention = CallingConvention.Cdecl)]
         private static extern int check_base64_encoded_x25519_key(string base64Key);
     }
 }
