@@ -21,7 +21,7 @@ jobs:
         echo "VERSION=$VERSION" >> $GITHUB_ENV
 
     - name: Setup NuGet
-      uses: NuGet/setup-nuget@v1.1
+      uses: nuget/setup-nuget@v1
 
     - name: Restore dependencies
       run: nuget restore $SOLUTION
