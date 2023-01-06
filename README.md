@@ -1,4 +1,6 @@
 # BoringTunSharp
+[![NuGet stable version](https://badgen.net/nuget/v/BoringTunSharp)](https://nuget.org/packages/BoringTunSharp)
+
 A C# library for Cloudflare's [BoringTun](https://github.com/cloudflare/boringtun).
 Note that this library does not create any network interfaces to intercept packets.
 
