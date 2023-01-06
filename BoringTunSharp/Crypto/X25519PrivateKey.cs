@@ -60,7 +60,7 @@ namespace BoringTunSharp.Crypto
         /// <returns></returns>
         public string Hex()
         {
-            return Convert.ToHexString(Data);
+            return BitConverter.ToString(Data).Replace("-", string.Empty);
         }
         #endregion
         #region BoringTun
