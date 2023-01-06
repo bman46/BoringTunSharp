@@ -13,10 +13,12 @@
         "packagesPath": "/Users/brendanmcshane/.nuget/packages/",
         "outputPath": "/Users/brendanmcshane/Projects/BoringTunSharp/BoringTunSharp/obj/",
         "projectStyle": "PackageReference",
+        "crossTargeting": true,
         "configFilePaths": [
           "/Users/brendanmcshane/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
+          "net6.0",
           "net7.0"
         ],
         "sources": {
@@ -24,6 +26,10 @@
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          },
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {}
@@ -36,6 +42,26 @@
         }
       },
       "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.101/RuntimeIdentifierGraph.json"
+        },
         "net7.0": {
           "targetAlias": "net7.0",
           "imports": [

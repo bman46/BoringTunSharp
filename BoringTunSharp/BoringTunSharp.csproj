@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
 
     <Version>1.0.0</Version>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageId>BoringTunSharp</PackageId>
     <Authors>Brendan McShane</Authors>
     <Description>A C# wrapper for BoringTun.</Description>
@@ -28,6 +29,7 @@
     <None Remove="Crypto\" />
   </ItemGroup>
   <ItemGroup>
+      <None Include="README.md" Pack="true" PackagePath="\"/>
     <None Update="libboringtun.dylib">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
