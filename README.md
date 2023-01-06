@@ -11,4 +11,4 @@ Note that this library does not create any network interfaces to intercept packe
 Clone the boringtun git repo and build the library with the following command: `cargo build --lib --no-default-features --release --features ffi-bindings`. Copy the resulting DLL/SO/DYLIB to the root directory of this project.
 
 ---
-<sub><sub><sub><sub>WireGuard is a registered trademark of Jason A. Donenfeld. BoringTunSharp is not sponsored or endorsed by Jason A. Donenfeld.</sub></sub></sub></sub>
+WireGuard is a registered trademark of Jason A. Donenfeld. BoringTunSharp is not sponsored or endorsed by Jason A. Donenfeld.
