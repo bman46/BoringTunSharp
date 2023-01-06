@@ -52,7 +52,7 @@ using (WireGuardTunnel client = new WireGuardTunnel(clientKey, serverKey.PublicK
         }
         Console.WriteLine("Handshake complete!");
 
-        // Example TCP SYN packet:
+        // Example TCP/IP SYN packet:
         string ip_header = "45000028";  // Version, IHL, Type of Service | Total Length
         ip_header += "abcd0000"; // Identification | Flags, Fragment Offset
         ip_header += "4006a6ec"; // TTL, Protocol | Header Checksum
