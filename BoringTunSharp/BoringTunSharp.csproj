@@ -27,12 +27,10 @@
   <ItemGroup>
     <None Remove="Tunneling\" />
     <None Remove="Crypto\" />
+    <None Remove="Tunneling\RateLimiter\" />
   </ItemGroup>
   <ItemGroup>
       <None Include="README.md" Pack="true" PackagePath="\" />
-    <None Update="libboringtun.dylib">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="libboringtun.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -43,5 +41,6 @@
   <ItemGroup>
     <Folder Include="Tunneling\" />
     <Folder Include="Crypto\" />
+    <Folder Include="Tunneling\RateLimiter\" />
   </ItemGroup>
 </Project>

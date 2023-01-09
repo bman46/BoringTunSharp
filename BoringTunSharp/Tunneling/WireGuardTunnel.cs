@@ -104,7 +104,7 @@ namespace BoringTunSharp
         /// <summary>
         /// The maximum size of a UDP packet
         /// </summary>
-        private static readonly int MaxUDPSize = 65535;
+        internal static readonly int MaxUDPSize = 65535;
 
         /// <summary>
         /// An instance of the wireguard tunnel
@@ -246,7 +246,7 @@ namespace BoringTunSharp
         /// <summary>
         /// The result of the operation
         /// </summary>
-        private struct wireguard_result
+        internal struct wireguard_result
         {
             public result_type op;
             public IntPtr size;
@@ -258,7 +258,7 @@ namespace BoringTunSharp
         /// <summary>
         /// Indicates the operation required from the caller
         /// </summary>
-        private enum result_type
+        internal enum result_type
         {
             /// <summary>
             /// No operation is required.
