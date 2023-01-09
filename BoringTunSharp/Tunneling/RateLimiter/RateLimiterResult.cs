@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text;
+
 namespace BoringTunSharp.Tunneling.RateLimiter
 {
 	public class RateLimiterResult
@@ -14,7 +16,7 @@ namespace BoringTunSharp.Tunneling.RateLimiter
         /// <summary>
         /// The data to perform an action on
         /// </summary>
-        public byte[] Data;
+        public byte[]? Data;
         /// <summary>
         /// The actions to perform with the data
         /// </summary>
@@ -36,6 +38,22 @@ namespace BoringTunSharp.Tunneling.RateLimiter
             /// No action is required
             /// </summary>
             No_Action = 3
+        }
+
+        /// <summary>
+        /// Convert this object to a string
+        /// </summary>
+        /// <returns>A multi line string with the result</returns>
+        public override string ToString()
+        {
+            StringBuilder bldr = new StringBuilder();
+            bldr.Append("Action required: " + ActionRequired + "\n");
+            bldr.Append("Tunnel Index: " + TunnelIndex);
+            if(Data != null)
+            {
+                bldr.Append("\nPacket: " + Convert.ToBase64String(Data));
+            }
+            return bldr.ToString();
         }
     }
 }

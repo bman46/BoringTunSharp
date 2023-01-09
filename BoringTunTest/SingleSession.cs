@@ -1,6 +1,7 @@
 ﻿using System;
 using BoringTunSharp;
 using BoringTunSharp.Crypto;
+using BoringTunSharp.Tunneling.RateLimiter;
 
 namespace BoringTunTest
 {
@@ -16,10 +17,13 @@ namespace BoringTunTest
             Console.WriteLine("Server: Private: " + serverKey.PrivateKey.Base64() + " public: " + serverKey.PublicKey.Base64());
             Console.WriteLine("Shared Key: " + sharedKey.Base64());
 
+            // Create Rate Limiter for server
+            RateLimiter serverRateLimiter = new RateLimiter(serverKey, 100);
+
             // Create a mock tunnel within this process
-            using (WireGuardTunnel client = new WireGuardTunnel(clientKey, serverKey.PublicKey, sharedKey, 100, 0))
+            using (WireGuardTunnel client = new WireGuardTunnel(clientKey, serverKey.PublicKey, sharedKey, 100, 1))
             {
-                using (WireGuardTunnel server = new WireGuardTunnel(serverKey, clientKey.PublicKey, sharedKey, 100, 0))
+                using (WireGuardTunnel server = new WireGuardTunnel(serverKey, clientKey.PublicKey, sharedKey, 100, 5))
                 {
                     // Start a handshake:
                     var handshake = client.Handshake();
@@ -30,6 +34,8 @@ namespace BoringTunTest
                         if (toServer)
                         {
                             Console.WriteLine("Send to server");
+                            var result = serverRateLimiter.ProcessPacket(handshake.Data);
+                            Console.WriteLine(result);
                             handshake = server.Decapsulate(handshake.Data);
                             Console.WriteLine("Result: " + handshake?.SendTo);
                             toServer = !toServer;
@@ -70,6 +76,8 @@ namespace BoringTunTest
                         if (toServer)
                         {
                             Console.WriteLine("Send to server");
+                            var result = serverRateLimiter.ProcessPacket(encryptedData.Data);
+                            Console.WriteLine(result);
                             encryptedData = server.Decapsulate(encryptedData.Data);
                             Console.WriteLine("Result: " + encryptedData?.SendTo);
                             toServer = !toServer;
